@@ -1,0 +1,22 @@
+<div fxLayout="column">
+    <mat-toolbar color="primary" fxLayout="column" fxFlex>
+        <mat-toolbar-row>
+            <div fxLayout="row" fxLayoutGap="4px" fxLayoutAlign="none center" fxFlex="40" fxFlex.lt-md="30">
+                <mat-icon>person</mat-icon>
+                <h1>Profiles</h1>
+            </div>
+            <mat-form-field fxFlex="20" fxFlex.lt-md>
+                <input matInput type="text">
+                <mat-icon matSuffix [inline]="true">
+                    search
+                </mat-icon>
+            </mat-form-field>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div fxLayout="row">
+        <app-profile-list fxFlex (select)="isSelected = true"></app-profile-list>
+        <mat-divider [vertical]="true"></mat-divider>
+        <app-profile-details *ngIf="isSelected" (close)="isSelected = false" fxFlex></app-profile-details>
+    </div>
+</div>

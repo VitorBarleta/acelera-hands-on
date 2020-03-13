@@ -1,0 +1,11 @@
+
+@import '~@angular/material/theming';
+$custom-font: mat-typography-config(
+  $font-family: 'Montserrat, sans-serif'
+);
+@include mat-core($custom-font);
+
+@import '~ngx-toastr/toastr';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: 'Montserrat', sans-serif; }

@@ -1,0 +1,22 @@
+.close {
+    margin: 20px;
+}
+
+.container {
+    padding: 24px;
+}
+
+.profile-image-header {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.profile-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+}
