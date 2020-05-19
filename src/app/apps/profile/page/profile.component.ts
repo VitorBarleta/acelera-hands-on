@@ -1,8 +1,9 @@
+import { ProfileDetailsComponent } from './../components/details/profile-details.component';
 import { ToastrService } from 'ngx-toastr';
 import { Profile, ProfileDetail } from './../state/profile.model';
 import { ProfileService } from './../state/profile.service';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Component, OnInit, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
 
 @Component({
     selector: 'app-profile',
@@ -10,20 +11,21 @@ import { Component, OnInit, ChangeDetectionStrategy, AfterViewChecked, ChangeDet
     styleUrls: ['./profile.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileComponent implements OnInit, AfterViewChecked {
+export class ProfileComponent implements OnInit, AfterViewChecked, AfterViewInit {
+
+    @ViewChild(ProfileDetailsComponent)
+    public profileDetailsComponent: ProfileDetailsComponent;
+
     public isSelected = false;
 
-    public isProfilesLoading$: BehaviorSubject<boolean>;
-    public isProfileDetailLoading$: BehaviorSubject<boolean>;
-    public isUpdatingProfile$: BehaviorSubject<boolean>;
+    public isProfilesLoading$: Subject<boolean>;
+    public isProfileDetailLoading$: Subject<boolean>;
 
     public profiles$: Observable<Array<Profile>>;
-    public profileDetail$: Observable<ProfileDetail>;
 
     constructor(private profileService: ProfileService,
-                private toastr: ToastrService,
-                private cdr: ChangeDetectorRef) {
-        this.isUpdatingProfile$ = this.profileService.isUpdatingProfile$;
+        private toastr: ToastrService,
+        private cdr: ChangeDetectorRef) {
         this.isProfilesLoading$ = this.profileService.isProfileLoading$;
         this.isProfileDetailLoading$ = this.profileService.isProfileDetailLoading$;
     }
@@ -36,8 +38,14 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
         this.cdr.markForCheck();
     }
 
+    ngAfterViewInit() {
+        this.profileService.isUpdatingProfile$.subscribe(updating =>
+            this.profileDetailsComponent.updating = updating);
+    }
+
     public profileSelected(id: number): void {
-        this.profileDetail$ = this.profileService.getProfile(id);
+        this.profileService.getProfile(id).subscribe(profile =>
+            this.profileDetailsComponent.patchFormValue(profile));
         this.isSelected = true;
     }
 

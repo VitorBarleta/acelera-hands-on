@@ -1,5 +1,5 @@
 import { ProfileDetail } from './../../state/profile.model';
-import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -8,11 +8,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
     styleUrls: ['./profile-details.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileDetailsComponent implements OnChanges {
+export class ProfileDetailsComponent implements AfterViewChecked {
     @Output() save: EventEmitter<ProfileDetail> = new EventEmitter();
-
-    @Input() profile: ProfileDetail;
-    @Input() updating = false;
+    public updating: boolean;
 
     public profileForm: FormGroup;
 
@@ -20,13 +18,12 @@ export class ProfileDetailsComponent implements OnChanges {
     get name() { return this.profileForm.controls.name }
     get lastName() { return this.profileForm.controls.lastName }
 
-    constructor() {
+    constructor(private cdr: ChangeDetectorRef) {
         this.createProfileForm();
     }
 
-    ngOnChanges(simpleChanges: SimpleChanges) {
-        if (simpleChanges?.profile?.currentValue)
-            this.patchFormValue(this.profile);
+    ngAfterViewChecked() {
+        this.cdr.markForCheck();
     }
 
     public createProfileForm(): void {

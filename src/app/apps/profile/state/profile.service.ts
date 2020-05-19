@@ -1,16 +1,16 @@
 import { Profile, ProfileDetail } from './profile.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap, delay } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class ProfileService {
     private readonly _baseUrl: string = 'http://localhost:3000/profiles';
 
-    public isProfileLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public isProfileDetailLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    public isUpdatingProfile$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public isProfileLoading$: Subject<boolean> = new Subject();
+    public isProfileDetailLoading$: Subject<boolean> = new Subject();
+    public isUpdatingProfile$: Subject<boolean> = new Subject();
 
     constructor(private httpClient: HttpClient) { }
 

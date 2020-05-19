@@ -26,8 +26,8 @@
                 <mat-spinner></mat-spinner>
             </div>
 
-            <app-profile-details [fxHide]="isProfileDetailLoading$ | async" [profile]="profileDetail$ | async"
-                (save)="saveChanges($event)" [updating]="isUpdatingProfile$ | async">
+            <app-profile-details [fxHide]="isProfileDetailLoading$ | async"
+                (save)="saveChanges($event)">
             </app-profile-details>
         </div>
     </div>
