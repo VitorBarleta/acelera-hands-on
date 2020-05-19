@@ -1,10 +1,18 @@
-import { Component, Output, EventEmitter } from "@angular/core";
+import {
+    Component,
+    Output,
+    EventEmitter,
+    Input,
+    ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
     selector: 'app-profile-list',
     templateUrl: './profile-list.component.html',
-    styleUrls: ['./profile-list.component.scss']
+    styleUrls: ['./profile-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileListComponent {
-    @Output() select: EventEmitter<any> = new EventEmitter();
+    @Output() picked: EventEmitter<any> = new EventEmitter();
+
+    @Input() profiles: Array<any>;
 }

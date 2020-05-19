@@ -1,5 +1,5 @@
 <!-- Todas as imagens foram adquiridas no site: https://unsplash.com/t/people -->
-<div class="search-container">
+<div class="mt-16 ml-16">
     <mat-form-field appearance="outline">
         <mat-label>Search</mat-label>
         <input matInput type="text">
@@ -11,52 +11,10 @@
 
 <mat-list>
     <h3 mat-subheader>Profiles</h3>
-    <mat-list-item class="list-item" (click)="select.emit()">
+    <mat-list-item *ngFor="let profile of profiles" class="list-item" (click)="picked.emit(profile.id)">
         <img mat-list-avatar
-            src="https://images.unsplash.com/photo-1525360250235-089297699054?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80">
-        <h4 mat-line>Kristoffer Gheorghie</h4>
-        <p mat-line>kgheorghiej@boston.com</p>
-    </mat-list-item>
-
-    <mat-list-item class="list-item" (click)="select.emit()">
-        <img mat-list-avatar
-            src="https://images.unsplash.com/photo-1577644036183-94ce86392140?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=636&q=80">
-        <h4 mat-line>Jeffrey Moorman</h4>
-        <p mat-line>jmoorman3@unblog.fr</p>
-    </mat-list-item>
-
-    <mat-list-item class="list-item" (click)="select.emit()">
-        <img mat-list-avatar
-            src="https://images.unsplash.com/photo-1557053910-d9eadeed1c58?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80">
-        <h4 mat-line>Micheline Dumphreys</h4>
-        <p mat-line>mdumphreys5@senate.gov</p>
-    </mat-list-item>
-
-    <mat-list-item class="list-item" (click)="select.emit()">
-        <img mat-list-avatar
-            src="https://images.unsplash.com/photo-1551772610-7a49996cd2c2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80">
-        <h4 mat-line>Evelyn Klaesson</h4>
-        <p mat-line>eklaessong@naver.com</p>
-    </mat-list-item>
-
-    <mat-list-item class="list-item" (click)="select.emit()">
-        <img mat-list-avatar
-            src="https://images.unsplash.com/photo-1551727974-8af20a3322f1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80">
-        <h4 mat-line>Delia Bowld</h4>
-        <p mat-line>dbowldk@xrea.com</p>
-    </mat-list-item>
-
-    <mat-list-item class="list-item" (click)="select.emit()">
-        <img mat-list-avatar
-            src="https://images.unsplash.com/photo-1551026081-ae81ac20c552?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80">
-        <h4 mat-line>Herrick Bleasdille</h4>
-        <p mat-line>hbleasdille8@springer.com</p>
-    </mat-list-item>
-
-    <mat-list-item class="list-item" (click)="select.emit()">
-        <img mat-list-avatar
-            src="https://images.unsplash.com/photo-1493657530338-219b29045562?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80">
-        <h4 mat-line>Sascha Mereweather</h4>
-        <p mat-line>smereweatherf@webeden.co.uk</p>
+            src="{{profile.profilePicture}}">
+        <h4 mat-line>{{profile.name}} {{profile.lastName}}</h4>
+        <p mat-line>{{profile.email}}</p>
     </mat-list-item>
 </mat-list>

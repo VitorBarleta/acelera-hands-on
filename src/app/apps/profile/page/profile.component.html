@@ -8,9 +8,27 @@
         </mat-toolbar-row>
     </mat-toolbar>
 
+    <div *ngIf="false" class="mt-16" fxLayout="row" fxLayoutAlign="center none" fxFlexFill>
+        <mat-spinner></mat-spinner>
+    </div>
+
     <div fxLayout="row">
-        <app-profile-list fxFlex (select)="isSelected = true"></app-profile-list>
+        <app-profile-list fxFlex (picked)="profileSelected($event)" [profiles]="profiles"></app-profile-list>
         <mat-divider [vertical]="true"></mat-divider>
-        <app-profile-details *ngIf="isSelected" (close)="isSelected = false" fxFlex></app-profile-details>
+        <div fxLayout="column" *ngIf="isSelected" fxFlex>
+            <div fxLayout="row" fxLayoutAlign="end center">
+                <button mat-icon-button (click)="isSelected = false">
+                    <mat-icon color="warn">close</mat-icon>
+                </button>
+            </div>
+
+            <div fxFlexFill fxLayoutAlign="center none">
+                <mat-spinner></mat-spinner>
+            </div>
+
+            <app-profile-details [profile]="profileDetail"
+                (save)="saveChanges($event)">
+            </app-profile-details>
+        </div>
     </div>
 </div>
