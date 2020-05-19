@@ -9,3 +9,19 @@ $custom-font: mat-typography-config(
 
 html, body { height: 100%; }
 body { margin: 0; font-family: 'Montserrat', sans-serif; }
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+.mr-16 {
+  margin-right: 16px;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.ml-16 {
+  margin-left: 16px;
+}
