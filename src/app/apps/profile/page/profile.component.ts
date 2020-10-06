@@ -1,7 +1,9 @@
+import { filter, tap } from 'rxjs/operators';
+import { ProfileQuery } from './../state/profile.query';
 import { ToastrService } from 'ngx-toastr';
-import { Profile, ProfileDetail } from './../state/profile.model';
+import { Profile } from './../state/profile.model';
 import { ProfileService } from './../state/profile.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Component, OnInit, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -11,40 +13,52 @@ import { Component, OnInit, ChangeDetectionStrategy, AfterViewChecked, ChangeDet
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent implements OnInit, AfterViewChecked {
-    public isSelected = false;
+    public profilesLoading$: Observable<boolean>;
+    public profileDetailLoading$: Observable<boolean>;
+    public updatingProfile$: Observable<boolean>;
+    public sidepanelOpened$: Observable<boolean>;
 
-    public isProfilesLoading$: BehaviorSubject<boolean>;
-    public isProfileDetailLoading$: BehaviorSubject<boolean>;
-    public isUpdatingProfile$: BehaviorSubject<boolean>;
+    public profiles$: Observable<Array<Profile>> = this.profileQuery.profiles$;
+    public activeProfile$: Observable<Profile> = this.profileQuery.selectActive();
 
-    public profiles$: Observable<Array<Profile>>;
-    public profileDetail$: Observable<ProfileDetail>;
-
-    constructor(private profileService: ProfileService,
-                private toastr: ToastrService,
-                private cdr: ChangeDetectorRef) {
-        this.isUpdatingProfile$ = this.profileService.isUpdatingProfile$;
-        this.isProfilesLoading$ = this.profileService.isProfileLoading$;
-        this.isProfileDetailLoading$ = this.profileService.isProfileDetailLoading$;
+    constructor(
+        private profileService: ProfileService,
+        private profileQuery: ProfileQuery,
+        private toastr: ToastrService,
+        private cdr: ChangeDetectorRef) {
+        this.updatingProfile$ = this.profileQuery.updating$;
+        this.profilesLoading$ = this.profileQuery.loading$;
+        this.profileDetailLoading$ = this.profileQuery.detailsLoading$;
+        this.sidepanelOpened$ = this.profileQuery.sidepanelOpened$;
     }
 
     ngOnInit() {
-        this.profiles$ = this.profileService.getProfiles();
+        this.profileService.getProfiles().subscribe();
+        this.subscribeToErrors();
     }
 
     ngAfterViewChecked() {
         this.cdr.markForCheck();
     }
 
-    public profileSelected(id: number): void {
-        this.profileDetail$ = this.profileService.getProfile(id);
-        this.isSelected = true;
+    public activateProfile(id: number): void {
+        this.profileService.activateProfile(id).subscribe();
     }
 
-    public saveChanges(profile: ProfileDetail): void {
+    public deactivateProfile(): void {
+        this.profileService.closeSidepanel();
+    }
+
+    public saveChanges(profile: Profile): void {
         this.profileService.updateProfile(profile)
             .subscribe(
-                () => this.toastr.success('The profile has been updated successfully', 'Update'),
-                err => this.toastr.error(`Failed to update the profile. Error: ${err.message}`, 'Error'));
+                () => this.toastr.success('The profile has been updated successfully', 'Update'));
+    }
+
+    public subscribeToErrors(): void {
+        this.profileQuery.error$.pipe(
+            filter(err => !!err),
+            tap(err => this.toastr.error(err?.statusText))
+        ).subscribe();
     }
 }

@@ -125,6 +125,7 @@
   },
   "defaultProject": "hands-on",
   "cli": {
-    "analytics": "f23d6c67-afcc-4754-9389-050a04445ba7"
+    "analytics": "f23d6c67-afcc-4754-9389-050a04445ba7",
+    "defaultCollection": "@datorama/akita"
   }
 }

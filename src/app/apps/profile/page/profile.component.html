@@ -8,26 +8,26 @@
         </mat-toolbar-row>
     </mat-toolbar>
 
-    <div *ngIf="isProfilesLoading$ | async" class="mt-16" fxLayout="row" fxLayoutAlign="center none" fxFlexFill>
+    <div *ngIf="profilesLoading$ | async" class="mt-16" fxLayout="row" fxLayoutAlign="center none" fxFlexFill>
         <mat-spinner></mat-spinner>
     </div>
 
-    <div fxLayout="row" [fxHide]="isProfilesLoading$ | async">
-        <app-profile-list fxFlex (select)="profileSelected($event)" [profiles]="profiles$ | async"></app-profile-list>
+    <div fxLayout="row" [fxHide]="profilesLoading$ | async">
+        <app-profile-list fxFlex (select)="activateProfile($event)" [profiles]="profiles$ | async"></app-profile-list>
         <mat-divider [vertical]="true"></mat-divider>
-        <div fxLayout="column" *ngIf="isSelected" fxFlex>
+        <div fxLayout="column" *ngIf="sidepanelOpened$ | async" fxFlex>
             <div fxLayout="row" fxLayoutAlign="end center">
-                <button mat-icon-button (click)="isSelected = false">
+                <button mat-icon-button (click)="deactivateProfile()">
                     <mat-icon color="warn">close</mat-icon>
                 </button>
             </div>
 
-            <div *ngIf="isProfileDetailLoading$ | async" fxFlexFill fxLayoutAlign="center none">
+            <div *ngIf="profileDetailLoading$ | async" fxFlexFill fxLayoutAlign="center none">
                 <mat-spinner></mat-spinner>
             </div>
 
-            <app-profile-details [fxHide]="isProfileDetailLoading$ | async" [profile]="profileDetail$ | async"
-                (save)="saveChanges($event)" [updating]="isUpdatingProfile$ | async">
+            <app-profile-details [fxHide]="profileDetailLoading$ | async" [profile]="activeProfile$ | async"
+                (save)="saveChanges($event)" [updating]="updatingProfile$ | async">
             </app-profile-details>
         </div>
     </div>

@@ -1,20 +1,25 @@
 <!-- Todas as imagens foram adquiridas no site: https://unsplash.com/t/people -->
-<div class="mt-16 ml-16">
-    <mat-form-field appearance="outline">
-        <mat-label>Search</mat-label>
-        <input matInput type="text" [formControl]="searchControl">
-        <mat-icon matSuffix>
-            search
-        </mat-icon>
-    </mat-form-field>
+<div fxLayout="column">
+    <div class="mt-16 ml-16" fxFlex="100" fxLayout="row" fxLayoutAlign="center none">
+        <mat-form-field appearance="outline" fxFlex="60">
+            <mat-label>Search</mat-label>
+            <input matInput type="text" [formControl]="searchControl" fxFlex="60">
+            <mat-icon matSuffix>
+                search
+            </mat-icon>
+        </mat-form-field>
+    </div>
+    
+    <mat-list>
+        <h3 mat-subheader>Profiles</h3>
+        <mat-list-item *ngIf="!displayProfiles[0]">
+            No profiles to display right now
+        </mat-list-item>
+        <mat-list-item *ngFor="let profile of displayProfiles" class="list-item" (click)="select.emit(profile.id)">
+            <img mat-list-avatar
+                src="{{profile.profilePicture}}">
+            <h4 mat-line>{{profile.name}} {{profile.lastName}}</h4>
+            <p mat-line>{{profile.email}}</p>
+        </mat-list-item>
+    </mat-list>
 </div>
-
-<mat-list>
-    <h3 mat-subheader>Profiles</h3>
-    <mat-list-item *ngFor="let profile of profilesDisplayed" class="list-item" (click)="select.emit(profile.id)">
-        <img mat-list-avatar
-            src="{{profile.profilePicture}}">
-        <h4 mat-line>{{profile.name}} {{profile.lastName}}</h4>
-        <p mat-line>{{profile.email}}</p>
-    </mat-list-item>
-</mat-list>

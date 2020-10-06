@@ -1,12 +1,12 @@
+import { ID } from '@datorama/akita';
+import { Observable } from 'rxjs';
+
 export interface Profile {
-    id: number;
+    id: ID;
     name: string;
     lastName: string;
     email: string;
     profilePicture: string;
-}
-
-export interface ProfileDetail extends Profile {
     city: string;
     state: string;
     company: string;

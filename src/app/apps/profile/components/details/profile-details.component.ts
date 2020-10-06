@@ -1,4 +1,4 @@
-import { ProfileDetail } from './../../state/profile.model';
+import { Profile } from './../../state/profile.model';
 import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -9,9 +9,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileDetailsComponent implements OnChanges {
-    @Output() save: EventEmitter<ProfileDetail> = new EventEmitter();
+    @Output() save: EventEmitter<Profile> = new EventEmitter();
 
-    @Input() profile: ProfileDetail;
+    @Input() profile: Profile;
     @Input() updating = false;
 
     public profileForm: FormGroup;
@@ -24,9 +24,8 @@ export class ProfileDetailsComponent implements OnChanges {
         this.createProfileForm();
     }
 
-    ngOnChanges(simpleChanges: SimpleChanges) {
-        if (simpleChanges?.profile?.currentValue)
-            this.patchFormValue(this.profile);
+    ngOnChanges() {
+        this.patchFormValue(this.profile);
     }
 
     public createProfileForm(): void {
@@ -44,7 +43,7 @@ export class ProfileDetailsComponent implements OnChanges {
         });
     }
 
-    public patchFormValue(profile: ProfileDetail): void {
+    public patchFormValue(profile: Profile): void {
         this.profileForm.patchValue(profile);
     }
 

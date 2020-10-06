@@ -64,7 +64,7 @@
 
         <div fxLayout="row" fxLayoutAlign="end center">
             <button mat-raised-button color="accent" (click)="saveChanges()"
-                [disabled]="profileForm.invalid || !profileForm.touched && !profileForm.dirty">
+                [disabled]="(profileForm.invalid || !profileForm.touched && !profileForm.dirty) || (updating)">
                 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
                     <span>Save</span>
                     <mat-spinner [diameter]="20" color="basic" [fxHide]="!updating"></mat-spinner>

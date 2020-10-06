@@ -1,3 +1,5 @@
+import { ProfileQuery } from './state/profile.query';
+import { ProfileStore } from './state/profile.store';
 import { ProfileService } from './state/profile.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -44,6 +46,8 @@ import { HttpClientModule } from '@angular/common/http';
         HttpClientModule
     ],
     providers: [
+        ProfileStore,
+        ProfileQuery,
         ProfileService
     ]
 })
