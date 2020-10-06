@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "profileapp-f442"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "profileapp-f442"
+  template:
+    metadata:
+      labels:
+        app: "profileapp-f442"
+    spec:
+      containers:
+        - name: "profileapp-f442"
+          image: "profileappcontainer.azurecr.io/profileapp"
+          ports:
+          - containerPort: 5061
