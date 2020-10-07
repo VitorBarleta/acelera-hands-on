@@ -1,0 +1,50 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: profileappcontainer.azurecr.io
+        username: ${{ secrets.acr_profileappcontainer_username }}
+        password: ${{ secrets.acr_profileappcontainer_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t profileappcontainer.azurecr.io/k8stestprofileapp:${{ github.sha }}
+        docker push profileappcontainer.azurecr.io/k8stestprofileapp:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_k8stestprofileapp_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep k8s-test-profile-appbfb9 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace k8s-test-profile-appbfb9`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: k8s-test-profile-appbfb9
+        container-registry-url: profileappcontainer.azurecr.io
+        container-registry-username: ${{ secrets.acr_profileappcontainer_username }}
+        container-registry-password: ${{ secrets.acr_profileappcontainer_password }}
+        secret-name: k8stestprofidockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: k8s-test-profile-appbfb9
+        manifests: |
+          manifests/deployment-1.yml
+          manifests/service-1.yml
+        images: |
+          profileappcontainer.azurecr.io/k8stestprofileapp:${{ github.sha }}
+        imagepullsecrets: |
+          k8stestprofidockerauth
