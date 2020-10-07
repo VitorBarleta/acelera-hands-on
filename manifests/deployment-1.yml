@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "k8stestprofileapp-52cc"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "k8stestprofileapp-52cc"
+  template:
+    metadata:
+      labels:
+        app: "k8stestprofileapp-52cc"
+    spec:
+      containers:
+        - name: "k8stestprofileapp-52cc"
+          image: "profileappcontainer.azurecr.io/k8stestprofileapp"
+          ports:
+          - containerPort: 80
