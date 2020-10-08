@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.2
         with: 
-          node-version: 12.18.4-alpine
+          node-version: 12.18.4
 
       - name: Install all dependencies
         run: npm install
