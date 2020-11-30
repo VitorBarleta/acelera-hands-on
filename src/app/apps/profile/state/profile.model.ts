@@ -1,8 +1,6 @@
-import { ID } from '@datorama/akita';
-import { Observable } from 'rxjs';
+import { Entity } from '@common/seedwork/entity';
 
-export interface Profile {
-    id: ID;
+export interface Profile extends Entity {
     name: string;
     lastName: string;
     email: string;

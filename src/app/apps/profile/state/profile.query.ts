@@ -7,12 +7,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class ProfileQuery extends QueryEntity<ProfileState, Profile>{
-    public profiles$: Observable<Profile[]> = this.selectAll();
-    public loading$: Observable<boolean> = this.selectLoading();
-    public detailsLoading$: Observable<boolean> = this.select(state => state.ui.detailsLoading);
-    public updating$: Observable<boolean> = this.select(state => state.ui.updating);
-    public sidepanelOpened$: Observable<boolean> = this.select(state => state.ui.sidepanelOpened);
-    public error$: Observable<HttpErrorResponse> = this.selectError();
+    public readonly profiles$: Observable<Profile[]> = this.selectAll();
+    public readonly loading$: Observable<boolean> = this.selectLoading();
+    public readonly detailsLoading$: Observable<boolean> = this.select(state => state.ui.detailsLoading);
+    public readonly updating$: Observable<boolean> = this.select(state => state.ui.updating);
+    public readonly sidepanelOpened$: Observable<boolean> = this.select(state => state.ui.sidepanelOpened);
+    public readonly error$: Observable<HttpErrorResponse> = this.selectError();
     
     constructor(protected store: ProfileStore) {
         super(store);

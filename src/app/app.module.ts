@@ -19,7 +19,9 @@ import { environment } from '../environments/environment'
     BrowserAnimationsModule,
 
     ToastrModule.forRoot({
-      preventDuplicates: true
+      preventDuplicates: true,
+      closeButton: true,
+      progressBar: true
     }),
 
     environment.production ? [] : AkitaNgDevtools.forRoot()

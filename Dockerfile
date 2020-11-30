@@ -1,7 +1,9 @@
-FROM node:12.18.4-alpine as build
+FROM node:12.18.4-alpine as base
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm install
+
+FROM base as build
 COPY . .
 RUN npm run build-prod
 

@@ -1,10 +1,11 @@
-import { filter, tap } from 'rxjs/operators';
+import { filter, take, takeUntil, tap } from 'rxjs/operators';
 import { ProfileQuery } from './../state/profile.query';
 import { ToastrService } from 'ngx-toastr';
 import { Profile } from './../state/profile.model';
 import { ProfileService } from './../state/profile.service';
 import { Observable } from 'rxjs';
-import { Component, OnInit, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { TakeUntilDestroy } from 'common/decorators/take-until-destroy';
 
 @Component({
     selector: 'app-profile',
@@ -12,7 +13,10 @@ import { Component, OnInit, ChangeDetectionStrategy, AfterViewChecked, ChangeDet
     styleUrls: ['./profile.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileComponent implements OnInit, AfterViewChecked {
+@TakeUntilDestroy
+export class ProfileComponent implements OnInit, AfterViewChecked, OnDestroy {
+    private componentDestroy: () => Observable<unknown>;
+
     public profilesLoading$: Observable<boolean>;
     public profileDetailLoading$: Observable<boolean>;
     public updatingProfile$: Observable<boolean>;
@@ -24,7 +28,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     constructor(
         private profileService: ProfileService,
         private profileQuery: ProfileQuery,
-        private toastr: ToastrService,
         private cdr: ChangeDetectorRef) {
         this.updatingProfile$ = this.profileQuery.updating$;
         this.profilesLoading$ = this.profileQuery.loading$;
@@ -32,9 +35,12 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
         this.sidepanelOpened$ = this.profileQuery.sidepanelOpened$;
     }
 
+    ngOnDestroy(): void { }
+
     ngOnInit() {
-        this.profileService.getProfiles().subscribe();
-        this.subscribeToErrors();
+        this.profileService.getProfiles()
+            .pipe(takeUntil(this.componentDestroy()))
+            .subscribe();
     }
 
     ngAfterViewChecked() {
@@ -42,7 +48,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     }
 
     public activateProfile(id: number): void {
-        this.profileService.activateProfile(id).subscribe();
+        this.profileService.activateProfile(id).pipe(takeUntil(this.componentDestroy())).subscribe();
     }
 
     public deactivateProfile(): void {
@@ -51,14 +57,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
 
     public saveChanges(profile: Profile): void {
         this.profileService.updateProfile(profile)
-            .subscribe(
-                () => this.toastr.success('The profile has been updated successfully', 'Update'));
-    }
-
-    public subscribeToErrors(): void {
-        this.profileQuery.error$.pipe(
-            filter(err => !!err),
-            tap(err => this.toastr.error(err?.statusText))
-        ).subscribe();
+            .pipe(takeUntil(this.componentDestroy()))
+            .subscribe();
     }
 }

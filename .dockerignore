@@ -1,6 +1,10 @@
 /node_modules
+/db
+/e2e
+/dist/*
+/k8s/*
+/.github/*
+
 .gitignore
 Dockerfile
 README.md
-/db
-/e2e

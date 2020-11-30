@@ -1,6 +1,6 @@
-import { Profile } from './../../state/profile.model';
-import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Profile } from '@core/apps/profile/state/profile.model';
 
 @Component({
     selector: 'app-profile-details',
@@ -8,10 +8,12 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
     styleUrls: ['./profile-details.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileDetailsComponent implements OnChanges {
+export class ProfileDetailsComponent {
     @Output() save: EventEmitter<Profile> = new EventEmitter();
 
-    @Input() profile: Profile;
+    @Input() set profile(profile: Profile) {
+        this.profileForm.patchValue(profile);
+    };
     @Input() updating = false;
 
     public profileForm: FormGroup;
@@ -22,10 +24,6 @@ export class ProfileDetailsComponent implements OnChanges {
 
     constructor() {
         this.createProfileForm();
-    }
-
-    ngOnChanges() {
-        this.patchFormValue(this.profile);
     }
 
     public createProfileForm(): void {
@@ -40,11 +38,9 @@ export class ProfileDetailsComponent implements OnChanges {
             company: [Validators.required],
             position: [Validators.required],
             description: [Validators.required]
+        }, {
+            updateOn: 'blur'
         });
-    }
-
-    public patchFormValue(profile: Profile): void {
-        this.profileForm.patchValue(profile);
     }
 
     public saveChanges(): void {
